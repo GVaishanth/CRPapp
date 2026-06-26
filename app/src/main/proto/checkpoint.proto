@@ -1,0 +1,56 @@
+syntax = "proto3";
+
+option java_package = "com.example.crashresilientpdf.core.checkpoint.proto";
+option java_multiple_files = true;
+
+// CRPapp - Predictive Crash Resilience Framework
+// Checkpoint Model - Phase 5
+// Versioned, extensible, crash-safe
+
+message Checkpoint {
+  // Schema versioning
+  int32 checkpoint_version = 1;   // = 2 for Phase 5
+  int32 recovery_version = 12;    // recovery engine version
+
+  // Document identity
+  string document_id = 2;
+  string display_name = 3;
+
+  // Reading position - rich state
+  int32 page = 4;
+  float zoom = 5;          // 1.0 = 100%
+  float offset_x = 6;      // PDF view X offset
+  float offset_y = 7;      // PDF view Y offset
+
+  // Resilience metadata
+  int64 timestamp_ms = 8;
+  float anomaly_score = 9;   // 0.0 .. 1.0 at time of save
+  int32 risk_tier = 10;      // 0=LOW, 1=ELEVATED, 2=HIGH
+  string trigger_reason = 11; // e.g. "memory rising", "MANUAL"
+  
+  // Trigger source
+  // AUTO_ANOMALY | AUTO_INTERVAL | MANUAL | LIFECYCLE | RECOVERY
+  string trigger = 13;
+
+  // Integrity
+  uint32 crc32 = 20;  // optional - DataStore is already atomic
+}
+
+// Per-document checkpoint history - ring buffer, newest first
+message DocumentHistory {
+  string document_id = 1;
+  repeated Checkpoint checkpoints = 2;  // max 3, newest first
+
+  // Recovery metadata
+  int32 recovery_count = 3;
+  int64 last_recovery_timestamp_ms = 4;
+  int64 last_recovery_checkpoint_age_ms = 5;
+  bool last_recovery_fallback_used = 6;
+  string last_recovery_source = 7;
+}
+
+// Root store
+message CheckpointStore {
+  int32 schema_version = 1;  // = 2
+  map<string, DocumentHistory> documents = 2;
+}

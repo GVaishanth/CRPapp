@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <application
+        android:name=".CrashResilientApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -11,15 +12,23 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CrashResilientPDF">
+        
+        <!-- Phase 2: Home is the launcher - Protected Document Workspace -->
         <activity
-            android:name=".MainActivity"
-            android:exported="true">
+            android:name=".ui.home.HomeActivity"
+            android:exported="true"
+            android:theme="@style/Theme.CrashResilientPDF">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Protected Viewer - opened from Home -->
+        <activity
+            android:name=".ui.viewer.ProtectedViewerActivity"
+            android:exported="false"
+            android:theme="@style/Theme.CrashResilientPDF.Viewer" />
     </application>
 
 </manifest>

@@ -1,3 +1,56 @@
 <resources>
     <string name="app_name">CrashResilientPDF</string>
+
+    <!-- Home / Framework -->
+    <string name="framework_title">Predictive Crash\nResilience Framework</string>
+    <string name="framework_subtitle">Predict → Checkpoint → Recover</string>
+    <string name="framework_description">An intelligent document protection system that monitors system health in real-time, predicts instability before crashes occur, and preserves your reading position automatically.</string>
+
+    <!-- Home actions -->
+    <string name="open_protected_document">Open Protected Document</string>
+    <string name="open_protected_document_sub">Select a PDF to open in the protected viewer</string>
+
+    <!-- Sections -->
+    <string name="recent_protected_sessions">Recent Protected Sessions</string>
+    <string name="system_status">System Status</string>
+    <string name="last_recovery">Last Recovery</string>
+    <string name="quick_statistics">Quick Statistics</string>
+
+    <!-- Status -->
+    <string name="status_engine_active">Prediction Engine Active</string>
+    <string name="status_checkpoint_ready">Checkpoint Manager Ready</string>
+    <string name="status_recovery_standby">Recovery System Standby</string>
+    <string name="status_operational">Operational</string>
+    <string name="status_ready">Ready</string>
+    <string name="status_standby">Standby</string>
+
+    <!-- Recovery -->
+    <string name="no_recent_recoveries">No recent recoveries — system stable</string>
+    <string name="recovery_count_none">No crashes recovered</string>
+
+    <!-- Stats placeholders -->
+    <string name="stat_documents_protected">Documents Protected</string>
+    <string name="stat_crashes_recovered">Crashes Recovered</string>
+    <string name="stat_prediction_accuracy">Prediction Accuracy</string>
+    <string name="stat_checkpoints_taken">Checkpoints Taken</string>
+    <string name="stat_coming_soon">Analytics in Phase 8</string>
+
+    <!-- Viewer -->
+    <string name="protected_viewer">Protected Viewer</string>
+    <string name="resilience_shield">Resilience Shield</string>
+
+    <!-- Recent session -->
+    <string name="recent_empty_title">No protected documents yet</string>
+    <string name="recent_empty_body">Open a PDF to start a protected reading session.\nYour position will be automatically preserved across crashes.</string>
+    <string name="page_label">Page %d</string>
+    <string name="recovered_badge">Recovered %d×</string>
+
+    <!-- Analytics placeholder -->
+    <string name="resilience_analytics">Resilience Analytics</string>
+    <string name="analytics_coming_soon">Full analytics dashboard — Phase 8</string>
+    <string name="view_analytics">View Analytics</string>
+
+    <!-- Generic -->
+    <string name="continue_reading">Continue Reading</string>
+    <string name="shield_protected">Protected</string>
 </resources>
