@@ -134,19 +134,7 @@ class RecoverySummaryBottomSheet : BottomSheetDialogFragment() {
             tv.setTextColor(
                 ContextCompat.getColor(
                     requireContext(),
-                    if (ok) R.color.resilience_heavy_container.let { 
-                        // use healthy color - just resolve normally
-                        com.example.crashresilientpdf.R.color.resilience_healthy 
-                    } else android.R.color.darker_gray
-                )
-            )
-            // Actually use onSurface colors to stay Material compliant
-            tv.setTextColor(
-                ContextCompat.getColor(
-                    requireContext(),
-                    if (ok) android.R.color.black.let { 
-                        ContextCompat.getColor(requireContext(), R.color.md_theme_light_onSurface)
-                    } else R.color.md_theme_light_outline
+                    if (ok) R.color.md_theme_light_onSurface else R.color.md_theme_light_outline
                 )
             )
         }

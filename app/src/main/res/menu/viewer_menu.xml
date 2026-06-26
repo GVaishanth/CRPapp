@@ -11,6 +11,14 @@
         android:title="Toggle Resilience HUD"
         app:showAsAction="never" />
     <item
+        android:id="@+id/action_health_dashboard"
+        android:title="System Health Dashboard"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_resilience_analytics"
+        android:title="@string/title_resilience_analytics"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/action_simulate_crash"
         android:title="Simulate Crash"
         app:showAsAction="never" />

@@ -29,6 +29,18 @@
             android:name=".ui.viewer.ProtectedViewerActivity"
             android:exported="false"
             android:theme="@style/Theme.CrashResilientPDF.Viewer" />
+
+        <!-- Health Dashboard - Phase 7 -->
+        <activity
+            android:name=".ui.dashboard.HealthDashboardActivity"
+            android:exported="false"
+            android:theme="@style/Theme.CrashResilientPDF" />
+
+        <!-- Resilience Analytics - Phase 8 -->
+        <activity
+            android:name=".ui.analytics.ResilienceAnalyticsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.CrashResilientPDF" />
     </application>
 
 </manifest>

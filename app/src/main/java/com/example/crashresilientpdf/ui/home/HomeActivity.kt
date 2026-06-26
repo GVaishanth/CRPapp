@@ -66,10 +66,10 @@ class HomeActivity : AppCompatActivity() {
         }
 
         binding.viewAnalyticsBtn.setOnClickListener {
-            Toast.makeText(this, getString(R.string.analytics_coming_soon), Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, com.example.crashresilientpdf.ui.analytics.ResilienceAnalyticsActivity::class.java))
         }
         binding.analyticsCard.setOnClickListener {
-            Toast.makeText(this, getString(R.string.analytics_coming_soon), Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, com.example.crashresilientpdf.ui.analytics.ResilienceAnalyticsActivity::class.java))
         }
 
         refreshSessions()

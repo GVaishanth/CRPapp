@@ -63,7 +63,8 @@ class PdfSessionController(
         }
         configurator
             .onPageChange { pageNum, pageCount -> onPageChange?.invoke(pageNum, pageCount) }
-            .onLoad { 
+            .onError { t -> android.util.Log.e("PdfSessionController", "Error loading PDF: ${t.message}", t) }
+            .onLoad {
                 // Restore zoom / offset after load - best effort
                 try {
                     if (defaultZoom != 1f) {

@@ -139,7 +139,7 @@ class ProtectedViewerActivity : AppCompatActivity() {
 
         // HUD bindings
         val hudRoot = findViewById<View>(R.id.resilienceHud)
-        hudCard = hudRoot.findViewById(R.id.hudCard)
+        hudCard = hudRoot
         hudSummaryRow = hudRoot.findViewById(R.id.hudSummaryRow)
         hudShieldIcon = hudRoot.findViewById(R.id.hudShieldIcon)
         hudRiskLabel = hudRoot.findViewById(R.id.hudRiskLabel)
@@ -294,6 +294,7 @@ class ProtectedViewerActivity : AppCompatActivity() {
             context = this,
             scrollSpeedProvider = { pdfSession.getScrollSpeed() }
         )
+        com.example.crashresilientpdf.ui.dashboard.AnomalyMonitorHolder.instance = anomalyMonitor
         var lastRiskTier = AnomalyState.RiskTier.LOW
 
         anomalyMonitor.start { state: AnomalyState ->
@@ -396,15 +397,17 @@ class ProtectedViewerActivity : AppCompatActivity() {
             showCheckpointFlash()
             updatePageInfo(page, pageCount)
         }
-        // Notify RecoveryManager of last successful checkpoint (for crash handler metadata)
-        RecoveryManager.notifyCheckpointSaved(page, lastAutoSaveMs)
     }
 
     private fun toggleHud() {
         hudExpanded = !hudExpanded
         hudDetails.isVisible = hudExpanded
         val icon = findViewById<ImageView>(R.id.hudExpandIcon)
-        icon.animate().rotation(if (hudExpanded) 180f else 0f).setDuration(180).start()
+        if (!android.animation.ValueAnimator.areAnimatorsEnabled()) {
+            icon.rotation = if (hudExpanded) 180f else 0f
+        } else {
+            icon.animate().rotation(if (hudExpanded) 180f else 0f).setDuration(180).start()
+        }
     }
 
     private fun updatePageInfo(page: Int, total: Int) {
@@ -490,6 +493,7 @@ class ProtectedViewerActivity : AppCompatActivity() {
     }
 
     private fun animateRiskChange(tier: AnomalyState.RiskTier) {
+        if (!android.animation.ValueAnimator.areAnimatorsEnabled()) return
         val target = when (tier) {
             AnomalyState.RiskTier.HIGH -> 1.05f
             AnomalyState.RiskTier.ELEVATED -> 1.025f
@@ -501,8 +505,13 @@ class ProtectedViewerActivity : AppCompatActivity() {
     }
 
     private fun showCheckpointFlash() {
-        checkpointFlash.alpha = 0f
         checkpointFlash.isVisible = true
+        if (!android.animation.ValueAnimator.areAnimatorsEnabled()) {
+            checkpointFlash.alpha = 1f
+            checkpointFlash.postDelayed({ checkpointFlash.isVisible = false }, 900)
+            return
+        }
+        checkpointFlash.alpha = 0f
         checkpointFlash.animate().alpha(1f).setDuration(120).withEndAction {
             checkpointFlash.postDelayed({
                 checkpointFlash.animate().alpha(0f).setDuration(250).withEndAction {
@@ -530,6 +539,14 @@ class ProtectedViewerActivity : AppCompatActivity() {
         return when (item.itemId) {
             R.id.action_checkpoint_now -> { doCheckpointNow(); true }
             R.id.action_toggle_hud -> { toggleHud(); true }
+            R.id.action_health_dashboard -> {
+                startActivity(android.content.Intent(this, com.example.crashresilientpdf.ui.dashboard.HealthDashboardActivity::class.java))
+                true
+            }
+            R.id.action_resilience_analytics -> {
+                startActivity(android.content.Intent(this, com.example.crashresilientpdf.ui.analytics.ResilienceAnalyticsActivity::class.java))
+                true
+            }
             R.id.action_simulate_crash -> {
                 // Save rich checkpoint before crash
                 val st = currentAnomalyState
@@ -562,17 +579,19 @@ class ProtectedViewerActivity : AppCompatActivity() {
         val st = currentAnomalyState
         if (::pdfSession.isInitialized) {
             lifecycleScope.launch {
-                if (st != null) {
-                    checkpointManager.saveCheckpoint(
-                        docSource.docId, docSource.displayName,
-                        pdfSession.currentPage,
-                        try { pdfSession.zoom } catch (_: Exception) { 1f },
-                        try { pdfSession.currentXOffset } catch (_: Exception) { 0f },
-                        try { pdfSession.currentYOffset } catch (_: Exception) { 0f },
-                        st, Checkpoint.Trigger.LIFECYCLE
-                    )
-                } else {
-                    checkpointManager.saveCheckpoint(docSource.docId, pdfSession.currentPage)
+                kotlinx.coroutines.withContext(kotlinx.coroutines.NonCancellable) {
+                    if (st != null) {
+                        checkpointManager.saveCheckpoint(
+                            docSource.docId, docSource.displayName,
+                            pdfSession.currentPage,
+                            try { pdfSession.zoom } catch (_: Exception) { 1f },
+                            try { pdfSession.currentXOffset } catch (_: Exception) { 0f },
+                            try { pdfSession.currentYOffset } catch (_: Exception) { 0f },
+                            st, Checkpoint.Trigger.LIFECYCLE
+                        )
+                    } else {
+                        checkpointManager.saveCheckpoint(docSource.docId, pdfSession.currentPage)
+                    }
                 }
             }
         }
@@ -581,6 +600,7 @@ class ProtectedViewerActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         if (::anomalyMonitor.isInitialized) anomalyMonitor.stop()
+        com.example.crashresilientpdf.ui.dashboard.AnomalyMonitorHolder.instance = null
     }
 
     companion object {

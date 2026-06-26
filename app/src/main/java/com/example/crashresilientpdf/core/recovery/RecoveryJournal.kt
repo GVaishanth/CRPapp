@@ -1,15 +1,16 @@
 package com.example.crashresilientpdf.core.recovery
 
 import android.content.Context
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.launch
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
 import java.util.UUID
 
 /**
- * RecoveryJournal - Phase 6
+ * RecoveryJournal - Phase 6 (Remediated in Phase 7.1 & Phase 10 Polish)
  *
  * Lightweight append-only event log for recovery events.
  * Presentation / analytics layer ONLY.
@@ -18,41 +19,86 @@ import java.util.UUID
  * - A recovery event NEVER modifies checkpoint history
  * - Read-only projection for UI / analytics
  * - Capped at 50 entries, FIFO
+ * - Remediated in Phase 7.1: In-memory caching & background I/O to eliminate main-thread stalls.
  *
  * This is NOT a core engine, manager, or controller.
  * Category: Journal
  */
 class RecoveryJournal(private val context: Context) {
 
+    companion object {
+        @Volatile private var cachedHistory: List<RecoveryRecord>? = null
+
+        fun createRecord(
+            documentId: String,
+            displayName: String,
+            restoredPage: Int,
+            restoredZoom: Float,
+            checkpointAgeMs: Long,
+            triggerType: String,
+            recoveryDurationMs: Long,
+            recoverySource: String,
+            fallbackUsed: Boolean,
+            validationResult: String = "OK"
+        ): RecoveryRecord = RecoveryRecord(
+            recoveryId = UUID.randomUUID().toString(),
+            timestampMs = System.currentTimeMillis(),
+            documentId = documentId,
+            displayName = displayName,
+            recoveryType = if (fallbackUsed) RecoveryRecord.RecoveryType.FALLBACK
+            else RecoveryRecord.RecoveryType.NORMAL,
+            restoredPage = restoredPage,
+            restoredZoom = restoredZoom,
+            checkpointAgeMs = checkpointAgeMs,
+            triggerType = triggerType,
+            recoveryDurationMs = recoveryDurationMs,
+            recoverySource = recoverySource,
+            validationResult = validationResult
+        )
+    }
+
     private val file: File get() = File(context.filesDir, "recovery_journal.json")
     private val lock = Any()
     private val maxEntries = 50
 
+    init {
+        if (RecoveryJournal.cachedHistory == null) {
+            CoroutineScope(Dispatchers.IO).launch {
+                synchronized(lock) {
+                    if (RecoveryJournal.cachedHistory == null) {
+                        RecoveryJournal.cachedHistory = readAllLocked()
+                    }
+                }
+            }
+        }
+    }
+
     fun record(record: RecoveryRecord) {
-        synchronized(lock) {
-            val list = readAllLocked().toMutableList()
-            list.add(0, record) // newest first
-            val trimmed = list.take(maxEntries)
-            writeAllLocked(trimmed)
+        CoroutineScope(Dispatchers.IO).launch {
+            synchronized(lock) {
+                val list = (RecoveryJournal.cachedHistory ?: readAllLocked()).toMutableList()
+                list.add(0, record) // newest first
+                val trimmed = list.take(maxEntries)
+                RecoveryJournal.cachedHistory = trimmed
+                writeAllLocked(trimmed)
+            }
         }
     }
 
     fun getHistory(documentId: String? = null): List<RecoveryRecord> {
-        synchronized(lock) {
-            val all = readAllLocked()
-            return if (documentId != null) {
-                all.filter { it.documentId == documentId }
-            } else all
+        val all = RecoveryJournal.cachedHistory ?: synchronized(lock) {
+            readAllLocked().also { RecoveryJournal.cachedHistory = it }
         }
+        return if (documentId != null) {
+            all.filter { it.documentId == documentId }
+        } else all
     }
 
     fun getLastRecovery(documentId: String): RecoveryRecord? {
         return getHistory(documentId).firstOrNull()
     }
 
-    fun getTotalRecoveryCount(): Int = synchronized(lock) {
-        readAllLocked().size
-    }
+    fun getTotalRecoveryCount(): Int = getHistory().size
 
     // --- JSON persistence ---
 
@@ -106,33 +152,4 @@ class RecoveryJournal(private val context: Context) {
         recoverySource = o.optString("recoverySource", ""),
         validationResult = o.optString("validationResult", "OK")
     )
-
-    companion object {
-        fun createRecord(
-            documentId: String,
-            displayName: String,
-            restoredPage: Int,
-            restoredZoom: Float,
-            checkpointAgeMs: Long,
-            triggerType: String,
-            recoveryDurationMs: Long,
-            recoverySource: String,
-            fallbackUsed: Boolean,
-            validationResult: String = "OK"
-        ): RecoveryRecord = RecoveryRecord(
-            recoveryId = UUID.randomUUID().toString(),
-            timestampMs = System.currentTimeMillis(),
-            documentId = documentId,
-            displayName = displayName,
-            recoveryType = if (fallbackUsed) RecoveryRecord.RecoveryType.FALLBACK
-                          else RecoveryRecord.RecoveryType.NORMAL,
-            restoredPage = restoredPage,
-            restoredZoom = restoredZoom,
-            checkpointAgeMs = checkpointAgeMs,
-            triggerType = triggerType,
-            recoveryDurationMs = recoveryDurationMs,
-            recoverySource = recoverySource,
-            validationResult = validationResult
-        )
-    }
 }

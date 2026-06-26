@@ -55,8 +55,9 @@ class AnomalyMonitor(
     /**
      * Phase 1-3 compat: start(onTick: (score: Double) -> Unit)
      */
+    @JvmName("startCompat")
     fun start(onTick: (score: Double) -> Unit) {
-        start { state -> onTick(state.score) }
+        start { state: AnomalyState -> onTick(state.score) }
     }
 
     /**

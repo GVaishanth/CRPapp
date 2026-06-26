@@ -31,8 +31,22 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+    kotlinOptions {
+        jvmTarget = "11"
+    }
     buildFeatures {
         viewBinding = true
+    }
+    // [FIX]: Instruct AAPT2 to leave PDF assets uncompressed during APK packaging
+    androidResources {
+        noCompress += "pdf"
+    }
+}
+
+// [FIX]: Added global task configuration to cover all Kotlin compile tasks (including unit & UI tests)
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+    kotlinOptions {
+        jvmTarget = "11"
     }
 }
 
@@ -67,7 +81,8 @@ protobuf {
     generateProtoTasks {
         all().forEach { task ->
             task.builtins {
-                id("java") {
+                // [FIX]: Replaced invalid id("java") with create("java") for Kotlin DSL
+                create("java") {
                     option("lite")
                 }
             }

@@ -9,12 +9,12 @@ import com.example.crashresilientpdf.core.checkpoint.Checkpoint
 import com.example.crashresilientpdf.core.checkpoint.CheckpointManager
 import com.example.crashresilientpdf.core.recovery.RecoveryJournal
 import com.example.crashresilientpdf.core.recovery.RecoveryRecord
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
@@ -92,8 +92,7 @@ class HealthDashboardViewModel(app: Application) : AndroidViewModel(app) {
             }
         }
 
-        pollJob = viewModelScope.launch {
-            var lastScore = 0.0
+        pollJob = viewModelScope.launch(Dispatchers.IO) {
             while (isActive) {
                 val anomaly = anomalyMonitor?.stateFlow?.value
                 val history = anomalyHistoryRepo.snapshot()

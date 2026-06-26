@@ -36,6 +36,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_gravity="center"
+                android:importantForAccessibility="no"
                 android:src="@drawable/ic_shield_check"
                 app:tint="@color/resilience_healthy" />
         </com.google.android.material.card.MaterialCardView>

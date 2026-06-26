@@ -6,6 +6,9 @@
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="4dp"
     android:layout_marginVertical="6dp"
+    android:minHeight="48dp"
+    android:focusable="true"
+    android:clickable="true"
     app:cardCornerRadius="16dp"
     app:strokeColor="@color/md_theme_light_outlineVariant"
     app:strokeWidth="0dp"
@@ -30,6 +33,7 @@
                 android:layout_height="24dp"
                 android:layout_gravity="center"
                 android:src="@drawable/ic_shield_check"
+                android:importantForAccessibility="no"
                 app:tint="@color/md_theme_light_onPrimaryContainer" />
         </com.google.android.material.card.MaterialCardView>
 
@@ -68,6 +72,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="6dp"
                     android:text="•"
+                    android:importantForAccessibility="no"
                     android:textColor="?attr/colorOnSurfaceVariant"
                     android:textAppearance="?attr/textAppearanceBodyMedium" />
 

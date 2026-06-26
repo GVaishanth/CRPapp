@@ -53,4 +53,77 @@
     <!-- Generic -->
     <string name="continue_reading">Continue Reading</string>
     <string name="shield_protected">Protected</string>
+
+    <!-- Dashboard & HUD Remediated Strings -->
+    <string name="title_system_health_dashboard">System Health Dashboard</string>
+    <string name="header_prediction">Prediction</string>
+    <string name="header_protection">Protection</string>
+    <string name="header_recovery">Recovery</string>
+    <string name="header_framework_status">Framework Status</string>
+    <string name="label_anomaly_score">Anomaly Score</string>
+    <string name="label_risk_tier">Risk Tier</string>
+    <string name="label_trend">Trend</string>
+    <string name="label_checkpoint_status">Checkpoint Status</string>
+    <string name="label_last_checkpoint">Last Checkpoint</string>
+    <string name="label_total_checkpoints">Total Checkpoints</string>
+    <string name="label_active_documents">Active Documents</string>
+    <string name="label_last_recovery">Last Recovery</string>
+    <string name="label_recovery_type">Recovery Type</string>
+    <string name="label_recovery_duration">Recovery Duration</string>
+    <string name="label_recovery_readiness">Recovery Readiness</string>
+    <string name="label_recent_checkpoints">Recent Checkpoints</string>
+    <string name="label_recovery_history">Recovery History</string>
+    <string name="label_prediction_engine">Prediction Engine</string>
+    <string name="label_checkpoint_engine">Checkpoint Engine</string>
+    <string name="label_recovery_engine">Recovery Engine</string>
+    <string name="label_framework_version">Framework Version</string>
+    <string name="label_framework_status">Framework Status</string>
+    <string name="label_memory">Memory</string>
+    <string name="label_cpu">CPU</string>
+    <string name="label_render">Render</string>
+    <string name="label_scroll">Scroll</string>
+    <string name="label_checkpoint_readiness">Checkpoint Readiness</string>
+    <string name="label_current_page">Current Page</string>
+    <string name="label_monitoring">Monitoring</string>
+    <string name="label_metrics_breakdown">Metrics Breakdown</string>
+
+    <!-- Bottom Sheet Remediated Strings -->
+    <string name="title_recovery_successful">Recovery Successful</string>
+    <string name="title_fallback_recovery">Fallback Recovery</string>
+    <string name="subtitle_recovery_successful">Your session was protected</string>
+    <string name="subtitle_fallback_recovery">An older checkpoint was used</string>
+    <string name="conf_doc_restored">Document restored</string>
+    <string name="conf_page_restored">Page restored</string>
+    <string name="conf_zoom_restored">Zoom restored</string>
+    <string name="conf_scroll_restored">Scroll position restored</string>
+    <string name="conf_session_resumed">Session resumed</string>
+    <string name="action_view_history">View History</string>
+
+    <!-- Phase 8 Resilience Analytics Strings -->
+    <string name="title_resilience_analytics">Resilience Analytics</string>
+    <string name="header_framework_overview">Framework Overview</string>
+    <string name="header_prediction_analytics">Prediction Analytics</string>
+    <string name="header_protection_analytics">Protection Analytics</string>
+    <string name="header_recovery_analytics">Recovery Analytics</string>
+    <string name="label_protected_sessions">Protected Sessions</string>
+    <string name="label_total_recoveries">Total Recoveries</string>
+    <string name="label_recovery_success_rate">Recovery Success Rate</string>
+    <string name="label_avg_anomaly_score">Avg Anomaly Score</string>
+    <string name="label_risk_tier_distribution">Risk Tier Distribution</string>
+    <string name="label_metric_contributions">Metric Contributions</string>
+    <string name="label_rolling_trends">Rolling Anomaly Trends</string>
+    <string name="label_trigger_reasons">Top Trigger Reasons</string>
+    <string name="label_checkpoints_per_session">Checkpoints / Session</string>
+    <string name="label_trigger_distribution">Trigger Distribution</string>
+    <string name="label_avg_checkpoint_age">Avg Checkpoint Age</string>
+    <string name="label_manual_vs_auto">Manual vs Automatic</string>
+    <string name="label_checkpoint_timeline">Checkpoint Timeline</string>
+    <string name="label_normal_vs_fallback">Normal vs Fallback</string>
+    <string name="label_avg_recovery_duration">Avg Recovery Duration</string>
+    <string name="label_avg_age_at_recovery">Avg Checkpoint Age at Recovery</string>
+    <string name="label_recovery_timeline">Recovery Timeline</string>
+    <string name="action_export_json">Export JSON</string>
+    <string name="action_export_csv">Export CSV</string>
+    <string name="toast_exporting">Exporting analytics...</string>
+    <string name="toast_export_complete">Export saved to %s</string>
 </resources>

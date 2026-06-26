@@ -16,8 +16,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 import java.util.concurrent.ConcurrentHashMap
 
 private val Context.checkpointDataStore: DataStore<CheckpointStore> by dataStore(
@@ -41,7 +39,6 @@ class CheckpointManager(private val context: Context) {
 
     private val dataStore = context.checkpointDataStore
     private val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
-    private val writeMutex = Mutex()
 
     // In-memory debounce
     private val lastWriteMs = ConcurrentHashMap<String, Long>()
@@ -67,25 +64,23 @@ class CheckpointManager(private val context: Context) {
             return
         }
 
-        writeMutex.withLock {
-            dataStore.updateData { store ->
-                val existing = store.documentsMap[checkpoint.documentId]
-                val history = existing?.checkpointsList ?: emptyList()
+        dataStore.updateData { store ->
+            val existing = store.documentsMap[checkpoint.documentId]
+            val history = existing?.checkpointsList ?: emptyList()
 
-                // Ring buffer: keep newest 3
-                val newHistory = listOf(checkpoint.toProto()) + history.take(2)
+            // Ring buffer: keep newest 3
+            val newHistory = listOf(checkpoint.toProto()) + history.take(2)
 
-                val newDocHistory = (existing?.toBuilder() ?: DocumentHistory.newBuilder()
-                    .setDocumentId(checkpoint.documentId))
-                    .clearCheckpoints()
-                    .addAllCheckpoints(newHistory)
-                    .build()
+            val newDocHistory = (existing?.toBuilder() ?: DocumentHistory.newBuilder()
+                .setDocumentId(checkpoint.documentId))
+                .clearCheckpoints()
+                .addAllCheckpoints(newHistory)
+                .build()
 
-                store.toBuilder()
-                    .putDocuments(checkpoint.documentId, newDocHistory)
-                    .setSchemaVersion(Checkpoint.CHECKPOINT_VERSION)
-                    .build()
-            }
+            store.toBuilder()
+                .putDocuments(checkpoint.documentId, newDocHistory)
+                .setSchemaVersion(Checkpoint.CHECKPOINT_VERSION)
+                .build()
         }
         lastWriteMs[checkpoint.documentId] = now
     }

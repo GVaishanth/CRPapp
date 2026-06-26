@@ -36,6 +36,7 @@
                         android:id="@+id/shieldIcon"
                         android:layout_width="18dp"
                         android:layout_height="18dp"
+                        android:importantForAccessibility="no"
                         android:src="@drawable/ic_shield_check" />
 
                     <TextView
@@ -104,7 +105,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:visibility="gone"
-                    app:cardBackgroundColor="?attr/colorInverseSurface"
+                    app:cardBackgroundColor="?attr/colorSecondaryContainer"
                     app:cardCornerRadius="12dp"
                     app:cardElevation="6dp">
 
@@ -115,7 +116,7 @@
                         android:paddingHorizontal="18dp"
                         android:paddingVertical="10dp"
                         android:textAppearance="?attr/textAppearanceTitleMedium"
-                        android:textColor="?attr/colorInverseOnSurface"
+                        android:textColor="?attr/colorOnSecondaryContainer"
                         tools:text="Page 12 / 48" />
                 </com.google.android.material.card.MaterialCardView>
 
@@ -196,6 +197,7 @@
                         android:id="@+id/bottomShieldIcon"
                         android:layout_width="16dp"
                         android:layout_height="16dp"
+                        android:importantForAccessibility="no"
                         android:src="@drawable/ic_shield_check" />
                     <TextView
                         android:id="@+id/bottomProtectionLabel"
