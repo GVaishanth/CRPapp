@@ -10,9 +10,10 @@
     android:focusable="true"
     android:clickable="true"
     app:cardCornerRadius="16dp"
-    app:strokeColor="@color/md_theme_light_outlineVariant"
-    app:strokeWidth="0dp"
-    app:cardElevation="1dp">
+    app:strokeColor="?attr/colorOutlineVariant"
+    app:strokeWidth="1dp"
+    app:cardElevation="1dp"
+    app:cardBackgroundColor="?attr/colorSurface">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,7 +26,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             app:cardCornerRadius="12dp"
-            app:cardBackgroundColor="@color/md_theme_light_primaryContainer"
+            app:cardBackgroundColor="?attr/colorPrimaryContainer"
             app:strokeWidth="0dp">
 
             <ImageView
@@ -34,7 +35,7 @@
                 android:layout_gravity="center"
                 android:src="@drawable/ic_shield_check"
                 android:importantForAccessibility="no"
-                app:tint="@color/md_theme_light_onPrimaryContainer" />
+                app:tint="?attr/colorOnPrimaryContainer" />
         </com.google.android.material.card.MaterialCardView>
 
         <LinearLayout
@@ -50,13 +51,15 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?attr/textAppearanceTitleMedium"
                 android:textColor="?attr/colorOnSurface"
+                android:textStyle="bold"
                 tools:text="sample.pdf" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="4dp">
+                android:layout_marginTop="4dp"
+                android:gravity="center_vertical">
 
                 <TextView
                     android:id="@+id/pageInfo"
@@ -84,13 +87,24 @@
                     android:textColor="?attr/colorOnSurfaceVariant"
                     tools:text="2 min ago" />
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/recoveryBadge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?attr/textAppearanceLabelSmall"
+                android:textColor="@color/resilience_elevated"
+                android:layout_marginTop="6dp"
+                android:visibility="gone"
+                tools:text="Recovered • 2 min ago"
+                tools:visibility="visible" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="end">
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/shieldChip"
@@ -104,16 +118,12 @@
                 style="@style/Widget.Material3.Chip.Assist"
                 android:clickable="false" />
 
-            <TextView
-                android:id="@+id/recoveryBadge"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?attr/textAppearanceLabelSmall"
-                android:textColor="@color/resilience_elevated"
-                android:layout_marginTop="4dp"
-                android:visibility="gone"
-                tools:text="Recovered 2×"
-                tools:visibility="visible" />
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="8dp"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_chevron_right" />
         </LinearLayout>
 
     </LinearLayout>

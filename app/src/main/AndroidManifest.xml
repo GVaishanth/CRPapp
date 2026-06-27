@@ -12,7 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CrashResilientPDF">
-        
+
         <!-- Phase 2: Home is the launcher - Protected Document Workspace -->
         <activity
             android:name=".ui.home.HomeActivity"
@@ -39,6 +39,12 @@
         <!-- Resilience Analytics - Phase 8 -->
         <activity
             android:name=".ui.analytics.ResilienceAnalyticsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.CrashResilientPDF" />
+
+        <!-- Settings Activity - Phase 12.1 -->
+        <activity
+            android:name=".ui.settings.SettingsActivity"
             android:exported="false"
             android:theme="@style/Theme.CrashResilientPDF" />
     </application>
